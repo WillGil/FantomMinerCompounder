@@ -14,7 +14,7 @@ npm install
 
 To use the program you need to create a .env file that the program can load, a sample file is given in [.env-sample.txt](.env-sample.txt)
 
-Inside you'll have to input the RPC URL of the Fantom network. Then you will have to put in the private key of your wallet, this can be obtained by a quick google (Do not share this with anyone)
+Inside you'll have to input the RPC URL of the Fantom network. Then you will have to put in the private key of your wallet, this can be obtained by a quick google (do not share this with anyone)
 
 ## License
 
