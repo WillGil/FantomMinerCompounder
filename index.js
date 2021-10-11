@@ -24,6 +24,9 @@ const fantomMinerContract = new web3.eth.Contract(FTM_MINER_ABI, FTM_MINER_CONTR
 
 let isCompoundingCurrently = false
 
+// Value to store current miners
+let minersBefore
+
 // Create function that can be used to check for compounding oppertunities
 const checkOpportunityToCompound = async function(){
 
@@ -65,10 +68,14 @@ const checkOpportunityToCompound = async function(){
     //console.log(`The maximum gas price is ${txCost}`)
     
     // We use this to determine what multiple of the tx cost we wanna compound at 
-    const multiplierTxCost = 5
+    const multiplierTxCost = 3
     const threshold = multiplierTxCost * txCost
     // We can compound now 
     if(ftmValue > threshold){
+
+        // Get the current amount of miners 
+        minersBefore = await fantomMinerContract.methods.hatcheryMiners(wallet.address).call()
+
         console.log(`Ready to compound ${ftmValue} FTM`);
         isCompoundingCurrently = true
         compound(gasLimit, gasPrice)
@@ -101,8 +108,14 @@ const compound = async function(gasLimit, gasPrice){
         return
     }
 
+    //Get miners after
+    const minersAfter = await fantomMinerContract.methods.hatcheryMiners(wallet.address).call()
+
+    // Now we check for how many miners we have gained
+    const minersIncrease = minersAfter - minersBefore
+
     isCompoundingCurrently = false
-    console.log("Finished Compounding.")
+    console.log(`Finished Compounding, you have gained ${minersIncrease} miners`)
 }
 
 checkOpportunityToCompound()
